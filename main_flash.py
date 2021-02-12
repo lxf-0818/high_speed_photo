@@ -4,7 +4,6 @@ import time
 '''
 
 bulb mode and manual focus
-
 camera wired remote:
 white gnd; red focus ; yellow shutter 
 
