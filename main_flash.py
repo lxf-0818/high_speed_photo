@@ -2,6 +2,7 @@
 import RPi.GPIO as GPIO
 import time
 '''
+
 bulb mode and manual focus
 
 camera wired remote:
