@@ -7,8 +7,8 @@ bulb mode and manual focus
 camera wired remote:
 white gnd; red focus ; yellow shutter 
 
-red pin 4 Optoisolator
-yellow + white pin 5 Optoisolator
+red pin 4 Opto isolator
+yellow + white pin 5 Opto isolator
 
 flash either wire:
 pin 4
@@ -18,7 +18,7 @@ soundPin = 19
 flashPin = 22 
 shutterPin = 18 
 delay_after_flash = 0.1
-delay_after_trigger = 1
+delay_after_trigger = .3
 
 def setup():
     GPIO.setmode(GPIO.BCM)
@@ -29,10 +29,10 @@ def setup():
     GPIO.output(flashPin,GPIO.HIGH)
     time.sleep(delay_after_flash)
     GPIO.output(flashPin,GPIO.LOW)
-    time.sleep(delay_after_flash)
-   
+      
 def sound_loop():
-       
+    # sleep otherwise the sound from the flash will trigger the sound in the loop()
+    time.sleep(.1)
     while True :
         if GPIO.input(soundPin) == GPIO.LOW:
             print ('sound detected....\nset trigger')
