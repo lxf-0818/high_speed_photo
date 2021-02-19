@@ -65,7 +65,6 @@ def event_loop(channel):
      
 if __name__ == '__main__':    # Program entrance
     print ('Program is starting ... \n')
-    GPIO.setwarnings(False)
     setup()
     signal.signal(signal.SIGINT, signal_handler)
     signal.pause()
