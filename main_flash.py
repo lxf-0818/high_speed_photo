@@ -41,9 +41,6 @@ def setup():
     time.sleep(delay_after_flash)
     GPIO.output(flashPin,GPIO.LOW)
    
-    time.sleep(.1) #if not sleep will fire delay before openning shutter in bulb mode 
-
-
     GPIO.add_event_detect(soundPin, GPIO.FALLING, callback=event_loop, bouncetime=2000) #2000ms 2sec
     GPIO.add_event_detect(startSwitch, GPIO.FALLING, callback=event_loop, bouncetime=2000)
     GPIO.add_event_detect(photogate, GPIO.FALLING, callback=event_loop, bouncetime=2000)
