@@ -20,8 +20,14 @@ shutterPin = 12
 startSwitch = 17
 photogate = 26
 continueSwitch = 16
+dripValve = 25
 delay_after_flash = 0.05
 delay_after_trigger = .5
+valveOpen = .095  # Set a delay variable for time (seconds) valve is open
+valvePause = .020 # set delay between drips (seconds)
+flashDelay = .290 # Set a delay for flash to be triggered: adjust 
+                  # this for part of collision you want to photograph
+ 
 
 def signal_handler(sig, frame):
     GPIO.cleanup()
@@ -36,6 +42,7 @@ def setup():
     GPIO.setup(photogate,GPIO.IN,pull_up_down=GPIO.PUD_UP)
     GPIO.setup(flashPin,GPIO.OUT)
     GPIO.setup(shutterPin,GPIO.OUT)
+    GPIO.setup(dripValve,GPIO.OUT)
     #wake up flash might be in 'sleep' mode 
     GPIO.output(flashPin,GPIO.HIGH)
     time.sleep(delay_after_flash)
@@ -51,9 +58,19 @@ def event_loop(channel):
     print (my_dict[channel])
     
     # just incase flash fired wait before done
-    time.sleep(.1)
+    #time.sleep(.1)
     GPIO.output(shutterPin,GPIO.HIGH)
     time.sleep(delay_after_trigger)  # delay to ensure shutter is fully open using bulb mode
+    
+    GPIO.output(dripValve,GPIO.HIGH) #release 1st drop 
+    time.sleep(valveOpen)
+    GPIO.output(dripValve,GPIO.LOW)
+    time.sleep(valvePause)           #    
+    GPIO.output(dripValve,GPIO.HIGH) #release 2nd drop to create collision 
+    time.sleep(valveOpen)
+    GPIO.output(dripValve,GPIO.LOW)
+    
+    time.sleep(flashDelay)
     
     GPIO.output(flashPin,GPIO.HIGH)
     time.sleep(delay_after_flash)
