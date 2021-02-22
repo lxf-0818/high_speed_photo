@@ -47,6 +47,10 @@ def setup():
     GPIO.output(flashPin,GPIO.HIGH)
     time.sleep(delay_after_flash)
     GPIO.output(flashPin,GPIO.LOW)
+    
+    time.sleep(.1) #just incase flash was trigger (not in sleep mode)
+    GPIO.output(shutterPin,GPIO.HIGH) # camera is in bulb mode
+    time.sleep(delay_after_trigger)  # delay to ensure shutter is fully open
    
     GPIO.add_event_detect(soundPin, GPIO.FALLING, callback=event_loop, bouncetime=2000) #2000ms 2sec
     GPIO.add_event_detect(startSwitch, GPIO.FALLING, callback=event_loop, bouncetime=2000)
@@ -56,12 +60,7 @@ def event_loop(channel):
     
     my_dict = {soundPin:'sound detected',startSwitch:'start startSwitch',photogate:'photogate'}
     print (my_dict[channel])
-    
-    # just incase flash fired wait before done
-    #time.sleep(.1)
-    GPIO.output(shutterPin,GPIO.HIGH)
-    time.sleep(delay_after_trigger)  # delay to ensure shutter is fully open using bulb mode
-    
+
     GPIO.output(dripValve,GPIO.HIGH) #release 1st drop 
     time.sleep(valveOpen)
     GPIO.output(dripValve,GPIO.LOW)
