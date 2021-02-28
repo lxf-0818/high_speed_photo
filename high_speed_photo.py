@@ -2,9 +2,7 @@
 import RPi.GPIO as GPIO
 import time,sys
 from bluedot import BlueDot
-
 '''
-
 bulb mode and manual focus
 camera wired remote:
 white gnd; red focus ; yellow shutter 
@@ -19,17 +17,14 @@ pin 5
 flashPin = 22 
 shutterPin = 12
 dripValve = 25
+shots = 0
 
 delay_after_flash = 0.05
 delay_after_trigger = .5
 valveOpen = .095  # 95ms Set a delay variable for time (seconds) valve is open
 valvePause = .020 # 20ms set delay between drips (seconds)
-flashDelay = .270 # 290ms Set a delay for flash to be triggered: adjust
-
+flashDelay = .290 # 290ms Set a delay for flash to be triggered: adjust
                   # this for part of collision you want to photograph
-from datetime import datetime
-
-
  
 def setup():
     GPIO.setmode(GPIO.BCM)
@@ -40,25 +35,30 @@ def setup():
     GPIO.output(flashPin,GPIO.HIGH)
     time.sleep(delay_after_flash)
     GPIO.output(flashPin,GPIO.LOW)
-    time.sleep(.1) #just incase flash was trigger (not in sleep mode)
+    time.sleep(.5) #just incase flash was trigger (not in sleep mode)
     GPIO.output(shutterPin,GPIO.HIGH) # camera is in bulb mode
     
 def event_loop():
-    print ('start.........')
+    global shots
+    
+    print ('start......... #:%s'%shots)
+    shots=+1
     GPIO.output(dripValve,GPIO.HIGH) #release 1st drop 
     time.sleep(valveOpen)
-    #time.sleep(4)
     GPIO.output(dripValve,GPIO.LOW)
-    time.sleep(valvePause)           #    
-    GPIO.output(dripValve,GPIO.HIGH) #release 2nd drop to create collision 
+    
+    time.sleep(valvePause)
+        
+    GPIO.output(dripValve,GPIO.HIGH) #release 2nd drop to create collision
     time.sleep(valveOpen)
     GPIO.output(dripValve,GPIO.LOW)
+    
     time.sleep(flashDelay)
 
     GPIO.output(flashPin,GPIO.HIGH)
     time.sleep(delay_after_flash)
     GPIO.output(flashPin,GPIO.LOW)
-    time.sleep(1)  # make sure flash is complete before closing shutter 
+    time.sleep(.5)  # make sure flash is complete before closing shutter 
     GPIO.output(shutterPin,GPIO.LOW)
     
 def destroy():
