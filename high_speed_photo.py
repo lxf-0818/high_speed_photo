@@ -25,6 +25,7 @@ valveOpen = .095  # 95ms Set a delay variable for time (seconds) valve is open
 valvePause = .020 # 20ms set delay between drips (seconds)
 flashDelay = .290 # 290ms Set a delay for flash to be triggered: adjust
                   # this for part of collision you want to photograph
+
  
 def setup():
     GPIO.setmode(GPIO.BCM)
